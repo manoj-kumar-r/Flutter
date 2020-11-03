@@ -1,37 +1,33 @@
 import 'package:flutter/material.dart';
 
+import 'custom_widgets/CustomWidgets.dart';
+
+//Material App allows to design an app with material components
 class TubeTutorial1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'TubeTutorial1',
-      home: TubeTutorial1LaunchMainClass(),
-      theme: ThemeData(primaryColor: Colors.blueAccent),
-    );
+    return MaterialApp(home: Home());
   }
 }
 
-class TubeTutorial1LaunchMainClass extends StatefulWidget {
-  @override
-  _TubeTutorial1LaunchMainClassLaunchMainClassState createState() => _TubeTutorial1LaunchMainClassLaunchMainClassState();
-}
-
-class _TubeTutorial1LaunchMainClassLaunchMainClassState extends State<TubeTutorial1LaunchMainClass> {
+//Scaffold allows to give a layout to the design
+//State Less Widget cannot change over time
+//State Ful can change over time layout or data inside it can be changed
+class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("TubeTutorial1"),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Welcome to MCDNT',
-              ),
-            ],
-          ),
-        ));
+      appBar: AppBar(
+        title: CustomWidgets.textField('My First App', 20, Colors.white),
+        centerTitle: true,
+        backgroundColor: Colors.red[600],
+      ),
+      body: CustomWidgets.getContainer(),
+      floatingActionButton: FloatingActionButton(
+        child: CustomWidgets.textField('Click Me', 10, Colors.white),
+        onPressed: () {},
+        backgroundColor: Colors.red[600],
+      ),
+    );
   }
 }
