@@ -6,25 +6,25 @@ import 'custom_widgets/CustomWidgets.dart';
 class TubeTutorial1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Home());
+    return MaterialApp(home: Example());
   }
 }
 
 //Scaffold allows to give a layout to the design
 //State Less Widget cannot change over time
 //State Ful can change over time layout or data inside it can be changed
-class Home extends StatelessWidget {
+class Example extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: CustomWidgets.textField('My First App', 20, Colors.white),
+        title: Examples.textField('My First App', 20, Colors.white),
         centerTitle: true,
         backgroundColor: Colors.red[600],
       ),
-      body: CustomWidgets.getContainer(),
+      body: Examples.getExpanded(),
       floatingActionButton: FloatingActionButton(
-        child: CustomWidgets.textField('Click Me', 10, Colors.white),
+        child: Examples.textField('Click Me', 10, Colors.white),
         onPressed: () {},
         backgroundColor: Colors.red[600],
       ),

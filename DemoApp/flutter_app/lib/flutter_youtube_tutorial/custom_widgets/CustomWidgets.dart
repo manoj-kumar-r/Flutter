@@ -1,10 +1,89 @@
 import 'package:flutter/material.dart';
 
-class CustomWidgets {
+class Examples {
+  static Widget getExpanded() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(flex: 3, child: Image.asset("assets/images/test.jpg")),
+        Expanded(
+          flex: 6,
+          child: Container(
+            color: Colors.cyan,
+            padding: EdgeInsets.all(20),
+            child: textField("1", 10, Colors.white),
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: Container(
+            color: Colors.pinkAccent,
+            padding: EdgeInsets.all(20),
+            child: textField("2", 10, Colors.white),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Container(
+            color: Colors.amber,
+            padding: EdgeInsets.all(20),
+            child: textField("3", 10, Colors.white),
+          ),
+        )
+      ],
+    );
+  }
+
+  static Widget getColumn() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        getRow(),
+        Container(
+          color: Colors.amber,
+          padding: EdgeInsets.all(40),
+          child: textField("Three Column", 10, Colors.white),
+        ),
+        Container(
+          color: Colors.pinkAccent,
+          padding: EdgeInsets.all(30),
+          child: textField("Two Column", 10, Colors.white),
+        ),
+        Container(
+          color: Colors.cyan,
+          padding: EdgeInsets.all(20),
+          child: textField("One Column", 10, Colors.white),
+        )
+      ],
+    );
+  }
+
+  static Widget getRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        textField("Hello World Row", 10, Colors.grey),
+        FlatButton(
+          onPressed: () {},
+          color: Colors.amber,
+          child: textField('Click me Row', 10, Colors.white),
+        ),
+        Container(
+          color: Colors.cyan,
+          padding: EdgeInsets.all(20),
+          child: textField("Inside Container Row", 10, Colors.white),
+        )
+      ],
+    );
+  }
+
   static Widget getContainer() {
     return Container(
       color: Colors.grey[400],
-      child: CustomWidgets.textField('Hello', 20, Colors.white),
+      child: textField('Hello', 20, Colors.white),
       padding: EdgeInsets.all(20),
       margin: EdgeInsets.all(10),
     );
