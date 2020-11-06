@@ -27,9 +27,7 @@ class _WorldTimeHomeState extends State<WorldTimeHome> {
 
   @override
   Widget build(BuildContext context) {
-    if (data.isEmpty) {
-      data = ModalRoute.of(context).settings.arguments;
-    }
+    data = data.isEmpty ? ModalRoute.of(context).settings.arguments : data;
     print(data);
 
     //set back ground
