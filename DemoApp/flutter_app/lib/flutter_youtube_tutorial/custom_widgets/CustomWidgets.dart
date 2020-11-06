@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Examples {
+
+
+
   static Widget getExpanded() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
