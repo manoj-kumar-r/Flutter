@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/simple_interest_calculator/si_home.dart';
 
-import 'flutter_youtube_tutorial_smartherd/Demo.dart';
-import 'flutter_youtube_tutorial_smartherd/ExploringUIWidgets.dart';
+import 'note_keeper/NoteKeeper.dart';
 
 void main() {
   // runApp(MyApp()); // Demo App Auto Created
@@ -15,5 +13,6 @@ void main() {
   // runApp(WorldTimeApp()); // World Time App
   // runApp(DemoApp()); // New tutorial Smart head
   // runApp(ExploringUI()); // New tutorial Exploring UI
-  runApp(SimpleInterestCalculator()); // Simple Interest Calculator
+  // runApp(SimpleInterestCalculator()); // Simple Interest Calculator
+  runApp(NoteKeeper()); // Note Keeper
 }
