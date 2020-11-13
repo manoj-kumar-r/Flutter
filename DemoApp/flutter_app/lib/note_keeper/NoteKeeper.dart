@@ -28,6 +28,8 @@ class NKHome extends StatefulWidget {
 }
 
 class _NKHomeState extends State<NKHome> {
+  int count = 2;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,32 +40,37 @@ class _NKHomeState extends State<NKHome> {
       body: getListView(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _createNewNote(),
+        onPressed: () => _detailsPage('Add Note'),
       ),
     );
   }
 
-  Widget getListView(){
-    var items = List<String>.generate(1000, (index) => 'Item $index');
-    var listView = ListView.builder(itemBuilder: (context, index) {
-      return Card(
-        child: ListTile(
-          leading: Icon(Icons.arrow_right),
-          title: Text(items[index]),
-          onTap: () {
-            _editNote();
-          },
-        ),
-      );
-    });
+  Widget getListView() {
+    var listView = ListView.builder(
+        itemCount: count,
+        itemBuilder: (context, index) {
+          return Card(
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.yellow,
+                child: Icon(Icons.arrow_right),
+              ),
+              title: Text(index.toString()),
+              onTap: () {
+                _detailsPage('Edit Note');
+              },
+              trailing: Icon(Icons.delete),
+            ),
+          );
+        });
     return listView;
   }
 
-  void _editNote(){
-    Navigator.pushNamed(context, '/createNote');
-  }
-
-  void _createNewNote() {
-    Navigator.pushNamed(context, '/createNote');
+  void _detailsPage(String title) {
+    Navigator.pushNamed(
+      context,
+      '/createNote',
+      arguments: {'title': title},
+    );
   }
 }
