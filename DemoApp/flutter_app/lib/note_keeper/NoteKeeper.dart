@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'createnote.dart';
+import 'sqdb.dart';
 
 class NoteKeeper extends StatelessWidget {
   @override
@@ -13,11 +15,7 @@ class NoteKeeper extends StatelessWidget {
         primaryColor: Colors.deepPurple,
         accentColor: Colors.deepPurpleAccent,
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => NKHome(),
-        '/createNote': (context) => NKCreateNote(),
-      },
+      home: NKHome(),
     );
   }
 }
@@ -28,7 +26,16 @@ class NKHome extends StatefulWidget {
 }
 
 class _NKHomeState extends State<NKHome> {
-  int count = 2;
+  var _dbHelper = DbHelper();
+  var _noteList = List<Note>();
+  var _count = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _noteList = List<Note>();
+    updateListView();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,37 +47,104 @@ class _NKHomeState extends State<NKHome> {
       body: getListView(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => _detailsPage('Add Note'),
+        onPressed: () => navigateToDetail(Note('', '', 1), 'Add Note'),
       ),
     );
   }
 
   Widget getListView() {
     var listView = ListView.builder(
-        itemCount: count,
+        itemCount: _count,
         itemBuilder: (context, index) {
+          print(this._noteList[index].toMap());
           return Card(
             child: ListTile(
               leading: CircleAvatar(
-                backgroundColor: Colors.yellow,
-                child: Icon(Icons.arrow_right),
+                backgroundColor:
+                    getPriorityColor(this._noteList[index].priority),
+                child: getPriorityIcon(this._noteList[index].priority),
               ),
-              title: Text(index.toString()),
+              title: Text(this._noteList[index].title),
+              subtitle: Text(this._noteList[index].date),
               onTap: () {
-                _detailsPage('Edit Note');
+                navigateToDetail(this._noteList[index], 'Edit Note');
               },
-              trailing: Icon(Icons.delete),
+              trailing: GestureDetector(
+                child: Icon(Icons.delete),
+                onTap: () {
+                  _delete(this._noteList[index]);
+                },
+              ),
             ),
           );
         });
     return listView;
   }
 
-  void _detailsPage(String title) {
-    Navigator.pushNamed(
-      context,
-      '/createNote',
-      arguments: {'title': title},
-    );
+  void _delete(Note note) async {
+    var result = await _dbHelper.deleteNote(note.id);
+    if (result != 0) {
+      _showSnackBar('Note deleted');
+      updateListView();
+    }
+  }
+
+  void _showSnackBar(String message) {
+    var snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  //return priority color
+  Color getPriorityColor(int priority) {
+    switch (priority) {
+      case 1:
+        return Colors.red;
+      case 2:
+        return Colors.yellow;
+      case 3:
+        return Colors.orange;
+      default:
+        return Colors.yellow;
+    }
+  }
+
+  //return priority Icon
+  Icon getPriorityIcon(int priority) {
+    switch (priority) {
+      case 1:
+        return Icon(Icons.play_arrow);
+      case 2:
+        return Icon(Icons.keyboard_arrow_right);
+      case 3:
+        return Icon(Icons.pause_sharp);
+      default:
+        return Icon(Icons.keyboard_arrow_right);
+    }
+  }
+
+  void navigateToDetail(Note note, String title) async {
+    bool result = await Navigator.push(context, MaterialPageRoute(
+      builder: (context) {
+        return NKCreateNote(note, title);
+      },
+    ));
+    if (result == true) {
+      setState(() {
+        updateListView();
+      });
+    }
+  }
+
+  void updateListView() {
+    final Future<Database> dbFuture = _dbHelper.initializeDatabase();
+    dbFuture.then((database) {
+      Future<List<Note>> noteListFuture = _dbHelper.getNoteList();
+      noteListFuture.then((noteList) {
+        setState(() {
+          this._noteList = noteList;
+          this._count = noteList.length;
+        });
+      });
+    });
   }
 }
