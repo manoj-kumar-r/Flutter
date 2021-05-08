@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "704811798076",
+    "project_id": "noteappflutter-bd23e",
+    "storage_bucket": "noteappflutter-bd23e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704811798076:android:f047661cf2c2d32a857d39",
+        "android_client_info": {
+          "package_name": "com.sysfore.demo.demoNoteApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "704811798076-pmuch0vao3lh817cqsvdkl996kbmsk03.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKGlISs4oFjq7xsDZjSFsg-v14BW936AI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "704811798076-pmuch0vao3lh817cqsvdkl996kbmsk03.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "704811798076-ff5qkl6re9q3im47hn6fvc9dljj0iat9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sysfore.demo.demoNoteApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
