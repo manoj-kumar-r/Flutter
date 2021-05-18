@@ -238,6 +238,9 @@ PODS:
   - Firebase/Firestore (7.11.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 7.11.0)
+  - Firebase/Storage (7.11.0):
+    - Firebase/CoreOnly
+    - FirebaseStorage (~> 7.11.0)
   - firebase_analytics (8.0.3):
     - Firebase/Analytics (= 7.11.0)
     - firebase_core
@@ -251,6 +254,10 @@ PODS:
     - Flutter
   - firebase_crashlytics (2.0.2):
     - Firebase/Crashlytics (= 7.11.0)
+    - firebase_core
+    - Flutter
+  - firebase_storage (8.0.5):
+    - Firebase/Storage (= 7.11.0)
     - firebase_core
     - Flutter
   - FirebaseAnalytics (7.11.0):
@@ -317,6 +324,9 @@ PODS:
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/UserDefaults (~> 7.0)
     - PromisesObjC (~> 1.2)
+  - FirebaseStorage (7.11.0):
+    - FirebaseCore (~> 7.0)
+    - GTMSessionFetcher/Core (~> 1.4)
   - Flutter (1.0.0)
   - FMDB/SQLCipher (2.7.5):
     - SQLCipher
@@ -386,6 +396,8 @@ PODS:
   - nanopb/encode (2.30908.0)
   - path_provider (0.0.1):
     - Flutter
+  - "permission_handler (5.1.0+2)":
+    - Flutter
   - PromisesObjC (1.2.12)
   - shared_preferences (0.0.1):
     - Flutter
@@ -409,10 +421,12 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
+  - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - hexcolor (from `.symlinks/plugins/hexcolor/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sms_otp_auto_verify (from `.symlinks/plugins/sms_otp_auto_verify/ios`)
   - sqflite_sqlcipher (from `.symlinks/plugins/sqflite_sqlcipher/ios`)
@@ -430,6 +444,7 @@ SPEC REPOS:
     - FirebaseCrashlytics
     - FirebaseFirestore
     - FirebaseInstallations
+    - FirebaseStorage
     - FMDB
     - GoogleAppMeasurement
     - GoogleDataTransport
@@ -453,6 +468,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_crashlytics:
     :path: ".symlinks/plugins/firebase_crashlytics/ios"
+  firebase_storage:
+    :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
   hexcolor:
@@ -461,6 +478,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
+  permission_handler:
+    :path: ".symlinks/plugins/permission_handler/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
   sms_otp_auto_verify:
@@ -479,6 +498,7 @@ SPEC CHECKSUMS:
   firebase_auth: e831dc75625eceb49a508832c165a63032eecc35
   firebase_core: 84dcd80ac6d29c3d1039071b7306ee99688eb9c7
   firebase_crashlytics: 1bf37e6bace6394a2bab8f316de395f49a836189
+  firebase_storage: c92e1108d723373191eafd442e21cb2bd96d2b08
   FirebaseAnalytics: cd3bd84d722a24a8923918af8af8e5236f615d77
   FirebaseAuth: 5fe4585c2ed847319f0ea68bd1d82c77e49ff9a0
   FirebaseCore: 907447d8917a4d3eb0cce2829c5a0ad21d90b432
@@ -486,6 +506,7 @@ SPEC CHECKSUMS:
   FirebaseCrashlytics: 272b675aa9d1e9bae1f9e1449fcc1f2cf6042806
   FirebaseFirestore: f495bb336b23eca23ea5d3605dce2a4cc214fde9
   FirebaseInstallations: a58d4f72ec5861840b84df489f2668d970df558a
+  FirebaseStorage: 8542711850ca181a3931c0ed483006a7b46039e7
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleAppMeasurement: fd19169c3034975cb934e865e5667bfdce59df7f
@@ -499,6 +520,7 @@ SPEC CHECKSUMS:
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sms_otp_auto_verify: 201803ac25e13feedaae96eda8b70b10c55b3338

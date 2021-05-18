@@ -37,6 +37,21 @@ class CustomUIElements {
     );
   }
 
+  static Widget getTextAC(
+      TextAlign align, Color color, double fontSize, String text) {
+    return Text(
+      text,
+      textAlign: align,
+      style: TextStyle(
+        decoration: TextDecoration.none,
+        color: color,
+        fontSize: fontSize,
+        fontFamily: 'OpenSansBold',
+      ),
+      textDirection: TextDirection.ltr,
+    );
+  }
+
   static Widget getImageContainer(String path, EdgeInsets edgeInsets) {
     return Container(
       margin: edgeInsets,
@@ -113,7 +128,8 @@ class CustomUIElements {
     );
   }
 
-  static void showSnackBar(BuildContext context, String message,{Color color = Colors.white}) {
+  static void showSnackBar(BuildContext context, String message,
+      {Color color = Colors.white}) {
     var snackBar = SnackBar(content: getTextColor(color, 15, message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }

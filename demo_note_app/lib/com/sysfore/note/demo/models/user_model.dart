@@ -1,4 +1,3 @@
-
 class UserModel {
   String emailId;
   String uid;
@@ -6,7 +5,8 @@ class UserModel {
   String profilePic;
   DateTime timeStamp;
 
-  UserModel({this.emailId, this.uid, this.userName, this.timeStamp, this.profilePic});
+  UserModel(
+      {this.emailId, this.uid, this.userName, this.timeStamp, this.profilePic});
 
   Map toMap(UserModel user) {
     var data = Map<String, dynamic>();
@@ -19,6 +19,7 @@ class UserModel {
   }
 
   UserModel.fromMap(Map<String, dynamic> mapData) {
+    print(mapData);
     this.uid = mapData["uid"];
     this.userName = mapData["userName"];
     this.emailId = mapData["emailId"];

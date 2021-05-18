@@ -1,11 +1,14 @@
 import 'package:demo_note_app/com/sysfore/note/demo/authenticate/forgot.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/authenticated/dashboard.dart';
+import 'package:demo_note_app/com/sysfore/note/demo/authenticated/welcomescreen.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/customui/customuielements.dart';
+import 'package:demo_note_app/com/sysfore/note/demo/utils/constants.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/utils/customcolor.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/utils/fireauth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginRoute extends CupertinoPageRoute {
   LoginRoute() : super(builder: (BuildContext context) => new Login());
@@ -201,11 +204,13 @@ class _LoginState extends State<Login> {
       await AuthenticationService.shared.signIn(
           email: _userName,
           password: _password,
-          onStatusChanged: (status, message) {
+          onStatusChanged: (status, message) async {
             setState(() {
               this._fieldsEnabled = true;
             });
             if (status) {
+              var prefs = await SharedPreferences.getInstance();
+              await prefs.setBool(PreferenceHolders.loggedId, true);
               CustomUIElements.showSnackBar(context, 'Success');
               _goToDashBoard();
             } else {
@@ -232,6 +237,8 @@ class _LoginState extends State<Login> {
   }
 
   void _goToDashBoard() async {
-    Navigator.pushReplacement(context, new DashBoardRoute());
+    // Navigator.pushReplacement(context, new WelcomeScreenRoute());
+    Navigator.pushAndRemoveUntil(
+        context, new WelcomeScreenRoute(), (route) => false);
   }
 }

@@ -30,7 +30,7 @@ class DbHelper {
     var path = documentsDirectory.path + TableName.DATABASE_NAME;
 
     var pKey = await SmsRetrieved.getAppSignature();
-    print("HasKey:$pKey");
+    print("pKey:$pKey");
 
     return await openDatabase(path,
         password: pKey,

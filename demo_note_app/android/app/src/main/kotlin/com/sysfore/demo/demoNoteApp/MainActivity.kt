@@ -1,4 +1,4 @@
-package com.sysfore.demo.demo_note_app
+package com.sysfore.demo.demoNoteApp
 
 import io.flutter.embedding.android.FlutterActivity
 

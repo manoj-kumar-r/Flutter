@@ -3,14 +3,30 @@ import 'dart:developer';
 
 import 'package:demo_note_app/com/sysfore/note/demo/authenticate/register.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/authenticated/dashboard.dart';
+import 'package:demo_note_app/com/sysfore/note/demo/authenticated/welcomescreen.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/customui/customuielements.dart';
+import 'package:demo_note_app/com/sysfore/note/demo/utils/constants.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/utils/customcolor.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:demo_note_app/com/sysfore/note/demo/utils/fireauth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login.dart';
+
+class SplashRoute extends CupertinoPageRoute {
+  SplashRoute() : super(builder: (BuildContext context) => new SplashPage());
+
+  @override
+  Widget buildPage(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation) {
+    return new FadeTransition(
+      opacity: animation,
+      child: new SplashPage(),
+    );
+  }
+}
 
 class SplashPage extends StatefulWidget {
   @override
@@ -26,13 +42,7 @@ class _SplashPageState extends State<SplashPage> with WidgetsBindingObserver {
     super.initState();
     log("&&&&&&&&&&&&&&&&");
     Timer(Duration(seconds: 10), () {
-      if (FirebaseAuth.instance.currentUser == null) {
-        setState(() {
-          _visible = true;
-        });
-      } else {
-        _goToDashBoard();
-      }
+      _validateAccount();
     });
   }
 
@@ -117,7 +127,7 @@ class _SplashPageState extends State<SplashPage> with WidgetsBindingObserver {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(left: 40, top: 20, right: 40),
+                margin: EdgeInsets.only(left: 40, top: 20, right: 40, bottom: 20),
                 padding: EdgeInsets.only(top: 5, bottom: 5),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -137,9 +147,36 @@ class _SplashPageState extends State<SplashPage> with WidgetsBindingObserver {
     );
   }
 
+  void _validateAccount() async {
+    var prefs = await SharedPreferences.getInstance();
+    var loggedIn = prefs.getBool(PreferenceHolders.loggedId);
+    var welcomeShown = prefs.getBool(PreferenceHolders.welcomeShown);
+    if (loggedIn != null && loggedIn) {
+      if (welcomeShown != null && welcomeShown) {
+        _goToDashBoard();
+      } else {
+        _goToWelcome();
+      }
+    } else {
+      await AuthenticationService.shared
+          .signOut(onStatusChanged: (status, message) {});
+      setState(() {
+        _visible = true;
+      });
+    }
+  }
+
+  void _goToWelcome() async {
+    Navigator.pushAndRemoveUntil(
+        context, new WelcomeScreenRoute(), (route) => false);
+    // Navigator.popUntil(context, (_) => !Navigator.canPop(context));
+    // Navigator.pushReplacement(context, new WelcomeScreenRoute());
+  }
+
   void _goToDashBoard() async {
     // Navigator.pushReplacement(context, new DashBoardRoute());
-    Navigator.pushReplacement(context, new RegisterRoute());
+    Navigator.pushAndRemoveUntil(
+        context, new DashBoardRoute(), (route) => false);
   }
 
   void _goToLogin() async {
