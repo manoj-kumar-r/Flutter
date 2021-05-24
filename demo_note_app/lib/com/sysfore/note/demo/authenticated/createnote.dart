@@ -43,7 +43,6 @@ class _CreateNoteState extends State<CreateNote> {
   var _dataBase = DbHelper.instance;
 
   var _picker = ImagePicker();
-  var _audioPath = "";
 
   @override
   void initState() {
@@ -150,8 +149,14 @@ class _CreateNoteState extends State<CreateNote> {
         SizedBox(height: 10),
         _noteTextFiled(),
         SizedBox(height: 5),
-        if (_note.attachPath != null && _note.attachPath.length > 0)
+        if (_note.attachPath != null &&
+            _note.attachPath.length > 0 &&
+            _note.attachType == "I")
           _getSelectedImage(),
+        if (_note.attachPath != null &&
+            _note.attachPath.length > 0 &&
+            _note.attachType == "A")
+          _getSelectedAudio(),
         SizedBox(height: 5),
         _bottomView(),
         SizedBox(height: 10),
@@ -183,6 +188,12 @@ class _CreateNoteState extends State<CreateNote> {
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
       ),
+    );
+  }
+
+  Widget _getSelectedAudio() {
+    return Container(
+      child: Text(_note.attachPath),
     );
   }
 
@@ -333,13 +344,17 @@ class _CreateNoteState extends State<CreateNote> {
       var result = await FilePicker.platform
           .pickFiles(type: FileType.audio, allowMultiple: false);
       setState(() {
-        _audioPath = result.files.single.path;
+        this._note.attachPath = result.files.single.path;
+        this._note.isAttached = true;
+        this._note.attachType = "A";
       });
     } on Exception catch (e) {
       print(e);
       CustomUIElements.showSnackBar(context, e.toString(), color: Colors.red);
       setState(() {
-        _audioPath = "";
+        this._note.attachPath = "";
+        this._note.isAttached = false;
+        this._note.attachType = "";
       });
     }
   }
