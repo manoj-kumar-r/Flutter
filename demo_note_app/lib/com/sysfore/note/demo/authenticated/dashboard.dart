@@ -81,7 +81,6 @@ class _DashBoardState extends LifecycleWatcherState<DashBoard> {
     print("Data called");
     List<NoteModel> data = [];
     if (kIsWeb) {
-
       var type = "";
       if (_selectedIndex == 1) {
         type = "A";
@@ -273,8 +272,8 @@ class _DashBoardState extends LifecycleWatcherState<DashBoard> {
   }
 
   Widget _getNoteList() {
-    if(kIsWeb){
-      if(loading) {
+    if (kIsWeb) {
+      if (loading) {
         return SpinKitCircle(
           color: CustomColors.colorPrimary,
           size: 50,
@@ -351,10 +350,7 @@ class _DashBoardState extends LifecycleWatcherState<DashBoard> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(15.0),
                         child: (kIsWeb)
-                            ? Image.network(
-                                _filterNoteList[index].attachPath,
-                                fit: BoxFit.fitHeight,
-                              )
+                            ? Image.network(_filterNoteList[index].attachPath, fit: BoxFit.fitHeight)
                             : Image.file(
                                 File(_filterNoteList[index].attachPath),
                                 fit: BoxFit.fitHeight,
@@ -367,6 +363,21 @@ class _DashBoardState extends LifecycleWatcherState<DashBoard> {
         },
       ),
     );
+  }
+
+  _imageFromWeb(String path) {
+    var url = AuthenticationService.shared.downloadUrl(path).toString();
+    print("url:$url");
+    return Image.network(url, fit: BoxFit.fitHeight);
+    // return StreamBuilder<Uri>(
+    //   stream: AuthenticationService.shared.downloadUrl(path).asStream(),
+    //   builder: (context, snapshot) {
+    //     if (snapshot.connectionState == ConnectionState.waiting) {
+    //       return Center(child: CircularProgressIndicator());
+    //     }
+    //     return Image.network(snapshot.data.toString(), fit: BoxFit.fitHeight);
+    //   },
+    // );
   }
 
   void _onAppBarProfileTapped() {

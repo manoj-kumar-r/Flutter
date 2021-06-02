@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/models/note_model.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/models/user_model.dart';
-// import 'package:firebase/firebase.dart' if (dart.library.html) "package:firebase/firebase.dart"
-//     as fb;
+import 'package:firebase/firebase.dart' as fb;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
@@ -82,19 +81,19 @@ class AuthenticationService {
       required Function(bool, String) onStatusChanged}) async {
     try {
       if (kIsWeb) {
-        // var metadata = fb.UploadMetadata(
-        //   contentType: (fileType == ".jpg") ? "images/*" : "audio/*",
-        // );
-        // var file = File(filePath);
-        // fb.UploadTaskSnapshot uploadTaskSnapshot = await fb
-        //     .storage()
-        //     .ref("noteFiles")
-        //     .child("$fileName$fileType")
-        //     .put(file, metadata)
-        //     .future;
-        // var uri = await uploadTaskSnapshot.ref.getDownloadURL();
-        // print(uri);
-        // onStatusChanged(true, uri.toString());
+        var metadata = fb.UploadMetadata(
+          contentType: (fileType == ".jpg") ? "images/*" : "audio/*",
+        );
+        var file = File(filePath);
+        fb.UploadTaskSnapshot uploadTaskSnapshot = await fb
+            .storage()
+            .ref("noteFiles")
+            .child("$fileName$fileType")
+            .put(file, metadata)
+            .future;
+        var uri = await uploadTaskSnapshot.ref.getDownloadURL();
+        print(uri);
+        onStatusChanged(true, uri.toString());
       } else {
         var file = File(filePath);
         await _firebaseStorageRef
@@ -110,6 +109,10 @@ class AuthenticationService {
     } on Exception catch (e) {
       onStatusChanged(false, e.toString());
     }
+  }
+
+  Future<Uri> downloadUrl(String photoUrl) {
+    return fb.storage().ref("noteFiles").child(photoUrl).getDownloadURL();
   }
 
   // get user from db

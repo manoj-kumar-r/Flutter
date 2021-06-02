@@ -41,7 +41,7 @@ class _SplashPageState extends State<SplashPage> with WidgetsBindingObserver {
     WidgetsBinding.instance?.addObserver(this);
     super.initState();
     log("&&&&&&&&&&&&&&&&");
-    Timer(Duration(seconds: 10), () {
+    Timer(Duration(seconds: 4), () {
       _validateAccount();
     });
   }
