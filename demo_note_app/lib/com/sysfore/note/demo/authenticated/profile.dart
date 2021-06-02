@@ -39,7 +39,7 @@ class _ProfileState extends State<Profile> {
 
   var _fieldsEnabled = false;
   var _picker = ImagePicker();
-  PickedFile _image;
+  PickedFile? _image;
   var _profileNetworkPath = "";
 
   @override
@@ -72,7 +72,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Widget _getAppBar() {
+  AppBar _getAppBar() {
     return AppBar(
       backgroundColor: Colors.transparent,
       centerTitle: false,
@@ -147,7 +147,7 @@ class _ProfileState extends State<Profile> {
       return ClipRRect(
         borderRadius: BorderRadius.circular(35),
         child: Image.file(
-          File(_image.path),
+          File(_image!.path),
           width: 100,
           height: 100,
           fit: BoxFit.fitHeight,
@@ -177,8 +177,8 @@ class _ProfileState extends State<Profile> {
     return TextFormField(
       enabled: _fieldsEnabled,
       keyboardType: TextInputType.text,
-      validator: (String userInput) {
-        if (userInput.isEmpty) {
+      validator: (String? userInput) {
+        if (userInput != null && userInput.isEmpty) {
           return 'Please enter email';
         } else {
           return null;
@@ -200,8 +200,8 @@ class _ProfileState extends State<Profile> {
     return TextFormField(
       enabled: _fieldsEnabled,
       keyboardType: TextInputType.text,
-      validator: (String userInput) {
-        if (userInput.isEmpty) {
+      validator: (String? userInput) {
+        if (userInput != null && userInput.isEmpty) {
           return 'Please enter User Name';
         } else {
           return null;
@@ -298,7 +298,7 @@ class _ProfileState extends State<Profile> {
           Navigator.pop(context);
           if (status) {
             setState(() {
-              _emailController.text = userModel.emailId;
+              _emailController.text = userModel!.emailId;
               _userNameController.text = userModel.userName;
               _profileNetworkPath = userModel.profilePic;
             });

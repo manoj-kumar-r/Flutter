@@ -106,8 +106,8 @@ class _ForGotPasswordState extends State<ForGotPassword> {
                   TextFormField(
                     enabled: _fieldsEnabled,
                     keyboardType: TextInputType.emailAddress,
-                    validator: (String userInput) {
-                      if (userInput.isEmpty) {
+                    validator: (String? userInput) {
+                      if (userInput != null && userInput.isEmpty) {
                         return 'Please enter email';
                       } else {
                         return null;
@@ -122,7 +122,9 @@ class _ForGotPasswordState extends State<ForGotPassword> {
                     decoration: CustomUIElements.getEditTextInputDecoration(
                         "EmailId", "assets/images/email.png"),
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   if (!_fieldsEnabled)
                     SpinKitCircle(
                       color: CustomColors.colorPrimary,
@@ -153,7 +155,7 @@ class _ForGotPasswordState extends State<ForGotPassword> {
   }
 
   Future<void> _resetButtonClick() async {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       print(_userName);
       setState(() {
         this._fieldsEnabled = false;

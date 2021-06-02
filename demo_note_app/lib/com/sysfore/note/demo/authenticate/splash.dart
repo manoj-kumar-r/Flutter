@@ -38,7 +38,7 @@ class _SplashPageState extends State<SplashPage> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
     super.initState();
     log("&&&&&&&&&&&&&&&&");
     Timer(Duration(seconds: 10), () {
@@ -48,7 +48,7 @@ class _SplashPageState extends State<SplashPage> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 
@@ -76,7 +76,7 @@ class _SplashPageState extends State<SplashPage> with WidgetsBindingObserver {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              margin: EdgeInsets.only(top: 50),
+              margin: EdgeInsets.only(top: 10),
               child: Image(
                 height: 100,
                 width: 100,

@@ -1,14 +1,18 @@
 class UserModel {
-  String emailId;
-  String uid;
-  String userName;
-  String profilePic;
-  DateTime timeStamp;
+  String emailId = "";
+  String uid = "";
+  String userName = "";
+  String profilePic = "";
+  DateTime? timeStamp = DateTime.now();
 
   UserModel(
-      {this.emailId, this.uid, this.userName, this.timeStamp, this.profilePic});
+      {this.emailId = "",
+      this.uid = "",
+      this.userName = "",
+      this.timeStamp = null,
+      this.profilePic = ""});
 
-  Map toMap(UserModel user) {
+  Map<String, dynamic> toMap(UserModel user) {
     var data = Map<String, dynamic>();
     data["uid"] = user.uid;
     data["userName"] = user.userName;

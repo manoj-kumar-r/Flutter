@@ -2,7 +2,7 @@ import 'package:demo_note_app/com/sysfore/note/demo/db/tablekeys.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/db/tablename.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/models/note_model.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
+// import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
 class DbHelper {
@@ -12,9 +12,9 @@ class DbHelper {
   static final DbHelper instance = DbHelper._privateConstructor();
 
   // only have a single app-wide reference to the database
-  static Database _database;
+  static Database? _database;
 
-  Future<Database> get database async {
+  Future<Database?> get database async {
     if (_database != null) return _database;
     // lazily instantiate the db the first time it is accessed
     _database = await _initDatabase();
@@ -26,7 +26,7 @@ class DbHelper {
     var documentsDirectory = await getApplicationDocumentsDirectory();
     var path = documentsDirectory.path + TableName.dataBaseName;
 
-    var pKey = await SmsRetrieved.getAppSignature();
+    var pKey = "jhkjh887987";//await SmsRetrieved.getAppSignature();
     print("pKey:$pKey");
 
     return await openDatabase(path,
@@ -40,7 +40,7 @@ class DbHelper {
   }
 
   Future<int> insertNote(NoteModel noteModel) async {
-    Database db = await DbHelper.instance.database;
+    Database? db = await DbHelper.instance.database;
 
     Map<String, dynamic> content = {
       TableKeys.keyId: noteModel.keyId,
@@ -54,7 +54,7 @@ class DbHelper {
       TableKeys.attachName: noteModel.attachName,
     };
 
-    var result = await db.update(TableName.tableNote, content,
+    var result = await db!.update(TableName.tableNote, content,
         where: TableKeys.keyId + ' = ? and ' + TableKeys.userId + ' = ? ',
         whereArgs: [noteModel.keyId, noteModel.userId]);
     if (result == 0) {
@@ -67,7 +67,7 @@ class DbHelper {
       {String noteId = "", String type = "A"}) async {
     print("userId:$userId");
     print("noteId:$noteId");
-    Database db = await DbHelper.instance.database;
+    Database? db = await DbHelper.instance.database;
     var query = "";
     switch (position) {
       case 0:
@@ -115,7 +115,7 @@ class DbHelper {
         break;
     }
 
-    var result = await db.rawQuery(query);
+    var result = await db!.rawQuery(query);
     return List.generate(result.length, (i) {
       var noteModel = NoteModel();
       noteModel.keyId = result[i][TableKeys.keyId].toString();

@@ -115,7 +115,7 @@ class CustomUIElements {
           SizedBox(
             width: 10,
           ),
-          Expanded(child: getTextColor(CustomColors.colorAccent, 15, title)),
+          Expanded(child: getTextColor(CustomColors.colorPrimary, 15, title)),
         ],
       ),
     );

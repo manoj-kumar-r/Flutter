@@ -43,7 +43,7 @@ class _RegisterState extends State<Register> {
 
   var _fieldsEnabled = true;
   var _picker = ImagePicker();
-  PickedFile _image;
+  PickedFile? _image;
 
   @override
   void initState() {
@@ -184,7 +184,7 @@ class _RegisterState extends State<Register> {
             : ClipRRect(
                 borderRadius: BorderRadius.circular(35),
                 child: Image.file(
-                  File(_image.path),
+                  File(_image!.path),
                   width: 100,
                   height: 100,
                   fit: BoxFit.fitHeight,
@@ -199,8 +199,8 @@ class _RegisterState extends State<Register> {
     return TextFormField(
       enabled: _fieldsEnabled,
       keyboardType: TextInputType.text,
-      validator: (String userInput) {
-        if (userInput.isEmpty) {
+      validator: (String? userInput) {
+        if (userInput != null && userInput.isEmpty) {
           return 'Please enter email';
         } else {
           return null;
@@ -222,8 +222,8 @@ class _RegisterState extends State<Register> {
     return TextFormField(
       enabled: _fieldsEnabled,
       keyboardType: TextInputType.text,
-      validator: (String userInput) {
-        if (userInput.isEmpty) {
+      validator: (String? userInput) {
+        if (userInput != null && userInput.isEmpty) {
           return 'Please enter User Name';
         } else {
           return null;
@@ -247,8 +247,8 @@ class _RegisterState extends State<Register> {
       obscureText: true,
       obscuringCharacter: "*",
       keyboardType: TextInputType.text,
-      validator: (String userInput) {
-        if (userInput.isEmpty) {
+      validator: (String? userInput) {
+        if (userInput != null && userInput.isEmpty) {
           return 'Please enter password';
         } else {
           return null;
@@ -352,7 +352,7 @@ class _RegisterState extends State<Register> {
     try {
       var _image = await _picker.getImage(source: ImageSource.camera);
       setState(() {
-        this._image = _image;
+        this._image = _image!;
       });
     } on Exception catch (e) {
       CustomUIElements.showSnackBar(context, e.toString(), color: Colors.red);
@@ -381,7 +381,7 @@ class _RegisterState extends State<Register> {
 
   //region Api
   Future<void> _signUpButtonClick() async {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       if (_image == null) {
         CustomUIElements.showSnackBar(context, "Please select a profile pic",
             color: Colors.red);
@@ -409,8 +409,8 @@ class _RegisterState extends State<Register> {
 
   //Register user in the fire store
   Future<void> _registerUser() async {
-    String name = _image.path.split('/').last;
-    await AuthenticationService.shared.uploadFile(_image.path, name,
+    String name = _image!.path.split('/').last;
+    await AuthenticationService.shared.uploadFile(_image!.path, name,
         onStatusChanged: (status, message) async {
       if (status) {
         var userModel = UserModel(
@@ -436,8 +436,12 @@ class _RegisterState extends State<Register> {
               }
             });
       } else {
-        await AuthenticationService.shared.signOut();
-        CustomUIElements.showSnackBar(context, 'Registration Failed');
+        await AuthenticationService.shared.signOut(
+            onStatusChanged: (status, message) {
+          if (status) {
+            CustomUIElements.showSnackBar(context, 'Registration Failed');
+          }
+        });
       }
     });
   }

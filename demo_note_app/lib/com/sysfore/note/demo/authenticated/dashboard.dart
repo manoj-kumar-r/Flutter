@@ -11,7 +11,9 @@ import 'package:demo_note_app/com/sysfore/note/demo/utils/constants.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/utils/customcolor.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/utils/fireauth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DashBoardRoute extends CupertinoPageRoute {
@@ -44,6 +46,8 @@ class _DashBoardState extends LifecycleWatcherState<DashBoard> {
 
   var _searchController = new TextEditingController();
 
+  var loading = false;
+
   @override
   void initState() {
     super.initState();
@@ -75,23 +79,59 @@ class _DashBoardState extends LifecycleWatcherState<DashBoard> {
 
   Future<void> getData() async {
     print("Data called");
-    var data;
-    if (_selectedIndex == 1) {
-      data = await _dataBase.getNoteListList(
-          2, AuthenticationService.shared.getCurrentUid(),
-          type: "A");
-    } else if (_selectedIndex == 2) {
-      data = await _dataBase.getNoteListList(
-          2, AuthenticationService.shared.getCurrentUid(),
-          type: "I");
+    List<NoteModel> data = [];
+    if (kIsWeb) {
+
+      var type = "";
+      if (_selectedIndex == 1) {
+        type = "A";
+      } else if (_selectedIndex == 2) {
+        type = "I";
+      } else {
+        type = "";
+      }
+      setState(() {
+        loading = true;
+        _noteList = [];
+        _filterNoteList = [];
+      });
+      await AuthenticationService.shared.getNoteFromServer(
+          type: type,
+          onStatusChanged: (status, message, noteData) {
+            if (status) {
+              data = noteData;
+              setState(() {
+                loading = false;
+                _noteList = data;
+                _filterNoteList = data;
+              });
+            } else {
+              CustomUIElements.showSnackBar(context, message);
+              setState(() {
+                loading = false;
+                _noteList = [];
+                _filterNoteList = [];
+              });
+            }
+          });
     } else {
-      data = await _dataBase.getNoteListList(
-          0, AuthenticationService.shared.getCurrentUid());
+      if (_selectedIndex == 1) {
+        data = await _dataBase.getNoteListList(
+            2, AuthenticationService.shared.getCurrentUid(),
+            type: "A");
+      } else if (_selectedIndex == 2) {
+        data = await _dataBase.getNoteListList(
+            2, AuthenticationService.shared.getCurrentUid(),
+            type: "I");
+      } else {
+        data = await _dataBase.getNoteListList(
+            0, AuthenticationService.shared.getCurrentUid());
+      }
+      setState(() {
+        _noteList = data;
+        _filterNoteList = data;
+      });
     }
-    setState(() {
-      _noteList = data;
-      _filterNoteList = data;
-    });
   }
 
   @override
@@ -103,7 +143,7 @@ class _DashBoardState extends LifecycleWatcherState<DashBoard> {
     );
   }
 
-  Widget _getAppBar() {
+  AppBar _getAppBar() {
     return AppBar(
       backgroundColor: Colors.transparent,
       centerTitle: false,
@@ -233,6 +273,14 @@ class _DashBoardState extends LifecycleWatcherState<DashBoard> {
   }
 
   Widget _getNoteList() {
+    if(kIsWeb){
+      if(loading) {
+        return SpinKitCircle(
+          color: CustomColors.colorPrimary,
+          size: 50,
+        );
+      }
+    }
     return Expanded(
       child: ListView.builder(
         shrinkWrap: true,
@@ -302,10 +350,15 @@ class _DashBoardState extends LifecycleWatcherState<DashBoard> {
                     if (_filterNoteList[index].attachType == "I")
                       ClipRRect(
                         borderRadius: BorderRadius.circular(15.0),
-                        child: Image.file(
-                          File(_filterNoteList[index].attachPath),
-                          fit: BoxFit.fitHeight,
-                        ),
+                        child: (kIsWeb)
+                            ? Image.network(
+                                _filterNoteList[index].attachPath,
+                                fit: BoxFit.fitHeight,
+                              )
+                            : Image.file(
+                                File(_filterNoteList[index].attachPath),
+                                fit: BoxFit.fitHeight,
+                              ),
                       ),
                 ],
               ),

@@ -8,6 +8,7 @@ import 'package:demo_note_app/com/sysfore/note/demo/utils/customcolor.dart';
 import 'package:demo_note_app/com/sysfore/note/demo/utils/fireauth.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -68,7 +69,7 @@ class _CreateNoteState extends State<CreateNote> {
     );
   }
 
-  Widget _getAppBar() {
+  AppBar _getAppBar() {
     return AppBar(
       backgroundColor: Colors.transparent,
       centerTitle: false,
@@ -170,8 +171,8 @@ class _CreateNoteState extends State<CreateNote> {
       maxLines: 1,
       autofocus: false,
       keyboardType: TextInputType.text,
-      validator: (String userInput) {
-        if (userInput.isEmpty) {
+      validator: (String? userInput) {
+        if (userInput != null && userInput.isEmpty) {
           return 'Please enter note title';
         } else {
           return null;
@@ -202,10 +203,15 @@ class _CreateNoteState extends State<CreateNote> {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(10.0),
-          child: Image.file(
-            File(_note.attachPath),
-            fit: BoxFit.fitHeight,
-          ),
+          child: (kIsWeb)
+              ? Image.network(
+                  _note.attachPath,
+                  fit: BoxFit.fitHeight,
+                )
+              : Image.file(
+                  File(_note.attachPath),
+                  fit: BoxFit.fitHeight,
+                ),
         ),
         Align(
           alignment: Alignment.topRight,
@@ -238,8 +244,8 @@ class _CreateNoteState extends State<CreateNote> {
       maxLines: 10,
       autofocus: false,
       keyboardType: TextInputType.multiline,
-      validator: (String userInput) {
-        if (userInput.isEmpty) {
+      validator: (String? userInput) {
+        if (userInput != null && userInput.isEmpty) {
           return 'Please enter note description';
         } else {
           return null;
@@ -343,8 +349,10 @@ class _CreateNoteState extends State<CreateNote> {
     try {
       var result = await FilePicker.platform
           .pickFiles(type: FileType.audio, allowMultiple: false);
+      print(result);
+      print(result?.files.single.path);
       setState(() {
-        this._note.attachPath = result.files.single.path;
+        this._note.attachPath = result!.files.single.path!;
         this._note.isAttached = true;
         this._note.attachType = "A";
       });
@@ -362,8 +370,10 @@ class _CreateNoteState extends State<CreateNote> {
   _selectImage() async {
     try {
       var _image = await _picker.getImage(source: ImageSource.gallery);
+      print(_image);
+      print(_image?.path);
       setState(() {
-        this._note.attachPath = _image.path;
+        this._note.attachPath = _image!.path;
         this._note.isAttached = true;
         this._note.attachType = "I";
       });
@@ -380,8 +390,10 @@ class _CreateNoteState extends State<CreateNote> {
   _selectCamera() async {
     try {
       var _image = await _picker.getImage(source: ImageSource.camera);
+      print(_image);
+      print(_image?.path);
       setState(() {
-        this._note.attachPath = _image.path;
+        this._note.attachPath = _image!.path;
         this._note.isAttached = true;
         this._note.attachType = "I";
       });
@@ -397,13 +409,28 @@ class _CreateNoteState extends State<CreateNote> {
   }
 
   Future<void> _saveNote() async {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!.validate()) {
       _note.userId = AuthenticationService.shared.getCurrentUid();
       _note.createdDate = _getFormattedTime();
-      var id = await _dataBase.insertNote(_note);
-      if (id > 0) {
-        CustomUIElements.showSnackBar(context, "Note Saved");
-        Navigator.pop(context);
+      if (kIsWeb) {
+        CustomUIElements.showLoadingAlertDialog(context, "Saving Note....");
+        await AuthenticationService.shared.uploadNoteToServer(
+            noteModel: _note,
+            onStatusChanged: (status, message) {
+              Navigator.pop(context);
+              if (status) {
+                CustomUIElements.showSnackBar(context, "Note Saved");
+                Navigator.pop(context);
+              } else {
+                CustomUIElements.showSnackBar(context, message);
+              }
+            });
+      } else {
+        var id = await _dataBase.insertNote(_note);
+        if (id > 0) {
+          CustomUIElements.showSnackBar(context, "Note Saved");
+          Navigator.pop(context);
+        }
       }
     }
   }

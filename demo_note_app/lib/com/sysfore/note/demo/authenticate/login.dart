@@ -114,8 +114,8 @@ class _LoginState extends State<Login> {
                   TextFormField(
                     enabled: _fieldsEnabled,
                     keyboardType: TextInputType.text,
-                    validator: (String userInput) {
-                      if (userInput.isEmpty) {
+                    validator: (String? userInput) {
+                      if (userInput!=null && userInput.isEmpty) {
                         return 'Please enter email';
                       } else {
                         return null;
@@ -136,8 +136,8 @@ class _LoginState extends State<Login> {
                     obscureText: true,
                     obscuringCharacter: "*",
                     keyboardType: TextInputType.text,
-                    validator: (String userInput) {
-                      if (userInput.isEmpty) {
+                    validator: (String? userInput) {
+                      if (userInput!=null && userInput.isEmpty) {
                         return 'Please enter password';
                       } else {
                         return null;
@@ -197,7 +197,7 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> _signInButtonClick() async {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState!=null && _formKey.currentState!.validate()) {
       setState(() {
         this._fieldsEnabled = false;
       });
@@ -214,7 +214,7 @@ class _LoginState extends State<Login> {
               CustomUIElements.showSnackBar(context, 'Success');
               _goToDashBoard();
             } else {
-              CustomUIElements.showSnackBar(context, message);
+              CustomUIElements.showSnackBar(context, message!);
             }
           });
     }
